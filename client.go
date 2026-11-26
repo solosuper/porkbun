@@ -16,6 +16,9 @@ import (
 
 const ApiBase = "https://api.porkbun.com/api/json/v3"
 
+// apiBase can be changed by tests to use a fake API.
+var apiBase = ApiBase
+
 // LibdnsZoneToPorkbunDomain Strips the trailing dot from a Zone
 func LibdnsZoneToPorkbunDomain(zone string) string {
 	return strings.TrimSuffix(zone, ".")
@@ -144,7 +147,7 @@ func (p *Provider) getZones(_ context.Context) ([]libdns.Zone, error) {
 func MakeApiRequest[T any](endpoint string, body io.Reader, responseType T) (T, error) {
 	client := http.Client{}
 
-	fullUrl := ApiBase + endpoint
+	fullUrl := apiBase + endpoint
 	u, err := url.Parse(fullUrl)
 	if err != nil {
 		return responseType, err
